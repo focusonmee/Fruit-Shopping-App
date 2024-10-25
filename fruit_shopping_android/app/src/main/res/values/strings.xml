@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">FruitShopping</string>
+    <string name="title_activity_payment">Payment</string>
+
+    <string-array name="payment_methods">
+        <item>Thanh toán khi nhận hàng</item>
+        <item>Chuyển khoản ngân hàng</item>
+        <item>Thẻ tín dụng</item>
+    </string-array>
+
+    <string-array name="shipping_methods">
+        <item>Giao hàng tiêu chuẩn</item>
+        <item>Giao hàng nhanh</item>
+        <item>Nhận hàng tại cửa hàng</item>
+    </string-array>
+
+</resources>
