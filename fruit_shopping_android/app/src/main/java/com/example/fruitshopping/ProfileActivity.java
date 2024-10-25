@@ -1,5 +1,6 @@
 package com.example.fruitshopping;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,14 +9,16 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import helper.AccountDBHelper;
+import model.Cart;
 
 public class ProfileActivity extends AppCompatActivity {
 
     private EditText nameEditText, phoneEditText, addressEditText, emailEditText, passwordEditText, newPasswordEditText;
-    private Button editButton, saveButton, backButton;
+    private Button editButton, saveButton, backButton, deleteButton;
     private AccountDBHelper dbHelper;
 
     @Override
@@ -33,6 +36,7 @@ public class ProfileActivity extends AppCompatActivity {
         editButton = findViewById(R.id.editButton);
         saveButton = findViewById(R.id.saveButton);
         backButton = findViewById(R.id.back);
+        deleteButton = findViewById(R.id.deleteButton);
         // Khởi tạo Database Helper
         dbHelper = new AccountDBHelper(this);
 
@@ -66,6 +70,39 @@ public class ProfileActivity extends AppCompatActivity {
 
             }
         });
+        deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new AlertDialog.Builder(ProfileActivity.this)
+                        .setTitle("Xác nhận xóa")
+                        .setMessage("Bạn có chắc chắn muốn xóa tài khoản này không?")
+                        .setPositiveButton("Xóa", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                // Lấy email từ SharedPreferences
+                                SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
+                                String email = sharedPreferences.getString("email", "");
+
+                                // Gọi hàm deleteAccount trong DBHelper
+                                dbHelper.deleteAccount(email);
+
+                                // Hiển thị thông báo xóa thành công
+                                Toast.makeText(ProfileActivity.this, "Tài khoản đã được xóa.", Toast.LENGTH_SHORT).show();
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
+                                editor.clear();
+                                editor.apply();
+                                Cart.clearItems();
+
+                                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                        })
+                        .setNegativeButton("Hủy", null) // Đóng hộp thoại nếu nhấn "Hủy"
+                        .show();
+            }
+        });
+
     }
 
     private void loadUserData(String email) {

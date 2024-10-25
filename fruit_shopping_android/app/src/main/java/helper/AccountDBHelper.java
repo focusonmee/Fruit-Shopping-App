@@ -77,9 +77,13 @@ public class AccountDBHelper extends SQLiteOpenHelper {
 
     public Cursor getAccountByEmailAndPassword(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT * FROM " + TABLE_NAME + " WHERE email = ? AND password = ?", new String[]{email, password});
+        Cursor cursor = db.rawQuery(
+                "SELECT * FROM " + TABLE_NAME + " WHERE email = ? AND password = ? AND is_active = 1",
+                new String[]{email, password}
+        );
         return cursor;
     }
+
 
     public boolean isAccountExist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
@@ -116,11 +120,16 @@ public class AccountDBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query(TABLE_NAME, null, COLUMN_EMAIL + " = ?", new String[]{email}, null, null, null);
     }
-    public boolean deleteAccount(String email) {
+
+    public void deleteAccount(String email) {
         SQLiteDatabase db = this.getWritableDatabase();
-        int rowsDeleted = db.delete(TABLE_NAME, COLUMN_EMAIL + " = ?", new String[]{email});
+        ContentValues values = new ContentValues();
+        values.put("is_active", 0); // Đặt is_active = 0
+
+        // Cập nhật is_active = 0 cho tài khoản có email tương ứng
+        db.update(TABLE_NAME, values, "email = ?", new String[]{email});
         db.close();
-        return rowsDeleted > 0; // Trả về true nếu có ít nhất một hàng bị xóa
     }
+
 
 }
