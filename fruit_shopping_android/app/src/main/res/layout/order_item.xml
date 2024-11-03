@@ -4,7 +4,9 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="16dp"
-    android:background="?android:attr/selectableItemBackground">
+
+    android:background="@color/cardview_light_background"
+    >
 
     <TextView
         android:id="@+id/orderId"

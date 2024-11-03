@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import com.example.fruitshopping.R;
 
+import java.text.NumberFormat;
 import java.util.List;
+import java.util.Locale;
 
 import model.OrderDetail;
 
@@ -24,12 +26,12 @@ public class OrderDetailAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return orderDetailList.size();
+        return orderDetailList != null ? orderDetailList.size() : 0; // Tránh lỗi NullPointerException
     }
 
     @Override
     public Object getItem(int position) {
-        return orderDetailList.get(position);
+        return orderDetailList != null ? orderDetailList.get(position) : null;
     }
 
     @Override
@@ -53,11 +55,16 @@ public class OrderDetailAdapter extends BaseAdapter {
         TextView textViewQuantity = convertView.findViewById(R.id.quantity);
 
         // Thiết lập dữ liệu cho các TextView
-        textViewProductName.setText("Name: " + orderDetail.getProductName());
-        textViewProductPrice.setText("Price: " + orderDetail.getProductPrice());
-        textViewQuantity.setText("Quantity: " + orderDetail.getQuantity());
+        textViewProductName.setText("Tên sản phẩm: " + orderDetail.getProductName());
+        textViewProductPrice.setText("Giá: " + formatCurrency(orderDetail.getProductPrice()));
+        textViewQuantity.setText("Số lượng: " + orderDetail.getQuantity());
 
         return convertView;
     }
 
+    // Định dạng tiền tệ
+    public static String formatCurrency(double amount) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return numberFormat.format(amount);
+    }
 }

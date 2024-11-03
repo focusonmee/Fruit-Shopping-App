@@ -1,4 +1,4 @@
-package com.example.fruitshopping;
+package com.example.fruitshopping.UserActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,9 +13,13 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fruitshopping.R;
+
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import adapter.ProductAdapterConfirm;
 import helper.OrderDBHelper;
@@ -33,7 +37,7 @@ public class ConfirmProductActivity extends AppCompatActivity {
     private float totalPrice;
     private Button backButton;
     private OrderDBHelper orderDBHelper;
-    private OrderDetailDBHelper orderDetailDBHelper;  // Thêm OrderDetailDBHelper
+    private OrderDetailDBHelper orderDetailDBHelper; // Thêm OrderDetailDBHelper
     private Spinner spinnerPaymentMethod;
     private Spinner spinnerShippingMethod;
     private EditText etNote;
@@ -57,7 +61,7 @@ public class ConfirmProductActivity extends AppCompatActivity {
 
         // Tạo DBHelper
         orderDBHelper = new OrderDBHelper(this);
-        orderDetailDBHelper = new OrderDetailDBHelper(this);  // Khởi tạo OrderDetailDBHelper
+        orderDetailDBHelper = new OrderDetailDBHelper(this); // Khởi tạo OrderDetailDBHelper
 
         // Lấy thông tin người dùng từ SharedPreferences
         SharedPreferences sharedPreferences = getSharedPreferences("user_session", MODE_PRIVATE);
@@ -86,8 +90,7 @@ public class ConfirmProductActivity extends AppCompatActivity {
 
         // Tính tổng tiền
         totalPrice = calculateTotalPrice(cartItems);
-        totalPriceTextView.setText(String.format("Tổng giá: %.2f VND", totalPrice));
-
+        totalPriceTextView.setText(formatCurrency(totalPrice)); // Đã sử dụng hàm formatCurrency
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +99,7 @@ public class ConfirmProductActivity extends AppCompatActivity {
                     Toast.makeText(view.getContext(), "Giỏ hàng rỗng! Không thể mua hàng.", Toast.LENGTH_SHORT).show();
                     return; // Dừng lại nếu giỏ hàng rỗng
                 }
+
                 String selectedPaymentMethod = spinnerPaymentMethod.getSelectedItem().toString();
                 String selectedShippingMethod = spinnerShippingMethod.getSelectedItem().toString();
                 String note = etNote.getText().toString().trim();
@@ -137,7 +141,6 @@ public class ConfirmProductActivity extends AppCompatActivity {
                     cartItems.clear();
                     Intent intent = new Intent(ConfirmProductActivity.this, ProductActivity.class); // Đổi tên lớp nếu cần
                     startActivity(intent);
-
                     finish();
                 } else {
                     Toast.makeText(view.getContext(), "Lỗi khi thêm đơn hàng.", Toast.LENGTH_SHORT).show();
@@ -163,9 +166,17 @@ public class ConfirmProductActivity extends AppCompatActivity {
         }
         return total;
     }
+
+    // Định dạng tiền tệ
+    public static String formatCurrency(double amount) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return numberFormat.format(amount);
+    }
+
+    // Cập nhật tổng giá
     public void updateTotalPrice() {
         List<CartItem> cartItems = Cart.getItems();
         totalPrice = calculateTotalPrice(cartItems);
-        totalPriceTextView.setText(String.format("Tổng giá: %.2f VND", totalPrice));
+        totalPriceTextView.setText(formatCurrency(totalPrice)); // Đã sử dụng hàm formatCurrency
     }
 }

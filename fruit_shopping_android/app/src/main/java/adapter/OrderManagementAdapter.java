@@ -8,8 +8,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.fruitshopping.UserActivity.OrderDetailActivity;
 import com.example.fruitshopping.R;
+import com.example.fruitshopping.adminActivity.OrderDetailAdminActivity;
 
 import java.text.NumberFormat;
 import java.util.List;
@@ -17,12 +17,12 @@ import java.util.Locale;
 
 import model.Order;
 
-public class OrderAdapter extends BaseAdapter {
+public class OrderManagementAdapter extends BaseAdapter {
     private Context context;
     private List<Order> orders;
 
     // Constructor
-    public OrderAdapter(Context context, int resource, List<Order> orders) {
+    public OrderManagementAdapter(Context context, List<Order> orders) {
         this.context = context;
         this.orders = orders;
     }
@@ -84,30 +84,29 @@ public class OrderAdapter extends BaseAdapter {
         Order order = orders.get(position);
 
         // Đặt dữ liệu lên các thành phần UI, kiểm tra null để tránh lỗi
-        holder.orderId.setText(order != null ? "Mã đơn hàng: " + order.getOrderId() : "");
-        holder.orderDate.setText(order != null ? "Thời gian đặt: " + order.getOrderDate() : "");
-        holder.orderTotal.setText(order != null ? "Tổng tiền: " + formatCurrency(order.getTotalMoney()) : "");
-        holder.orderStatus.setText(order != null ? "Trạng thái đơn hàng: " + order.getStatus() : "");
-        holder.orderNote.setText(order != null ? "Ghi chú: " + order.getNote() : "");
-        holder.orderShippingAddress.setText(order != null ? "Địa chỉ giao hàng: " + order.getShippingAddress() : "");
-        holder.orderShippingMethod.setText(order != null ? "Phương thức giao hàng: " + order.getShippingMethod() : "");
-        holder.orderPaymentMethod.setText(order != null ? "Phương thức thanh toán: " + order.getPaymentMethod() : "");
+        if (order != null) {
+            holder.orderId.setText("Mã đơn hàng: " + order.getOrderId());
+            holder.orderDate.setText("Thời gian đặt: " + order.getOrderDate());
 
-        // Định nghĩa hành động khi click vào convertView
+            // Định dạng tổng tiền thành dạng tiền tệ
+            NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+            String formattedTotal = currencyFormat.format(order.getTotalMoney());
+            holder.orderTotal.setText("Tổng tiền: " + formattedTotal);
+
+            holder.orderStatus.setText("Trạng thái đơn hàng: " + order.getStatus());
+            holder.orderNote.setText("Ghi chú: " + order.getNote());
+            holder.orderShippingAddress.setText("Địa chỉ giao hàng: " + order.getShippingAddress());
+            holder.orderShippingMethod.setText("Phương thức giao hàng: " + order.getShippingMethod());
+            holder.orderPaymentMethod.setText("Phương thức thanh toán: " + order.getPaymentMethod());
+        }
+
+        // Sự kiện khi item được click
         convertView.setOnClickListener(v -> {
-            if (order != null) {
-                Intent intent = new Intent(context, OrderDetailActivity.class);
-                intent.putExtra("orderId", order.getOrderId()); // Truyền orderId
-                context.startActivity(intent);
-            }
+            Intent intent = new Intent(context, OrderDetailAdminActivity.class);
+            intent.putExtra("orderId", order.getOrderId()); // Truyền orderId
+            context.startActivity(intent);
         });
 
         return convertView;
-    }
-
-    // Định dạng tiền tệ
-    public static String formatCurrency(double amount) {
-        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
-        return numberFormat.format(amount);
     }
 }

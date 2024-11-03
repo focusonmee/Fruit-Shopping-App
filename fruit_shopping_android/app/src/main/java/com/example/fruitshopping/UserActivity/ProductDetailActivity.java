@@ -1,4 +1,4 @@
-package com.example.fruitshopping;
+package com.example.fruitshopping.UserActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,13 +10,18 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.fruitshopping.R;
+
 import dtos.ProductDTO;
 import model.Cart;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private TextView productName, productDescription, productPrice, quantityText;
-    private Button increaseButton, decreaseButton, addToCartButton, buyButton, back; // Thêm buyButton
+    private Button increaseButton, decreaseButton, addToCartButton, buyButton, back;
     private ImageView productImage;
 
     private int quantity = 1;
@@ -34,15 +39,16 @@ public class ProductDetailActivity extends AppCompatActivity {
         increaseButton = findViewById(R.id.increaseButton);
         decreaseButton = findViewById(R.id.decreaseButton);
         addToCartButton = findViewById(R.id.addToCartButton);
-        buyButton = findViewById(R.id.buyButton); // Khởi tạo buyButton
+        buyButton = findViewById(R.id.buyButton);
         productImage = findViewById(R.id.productImage);
         back = findViewById(R.id.back);
+
         // Lấy dữ liệu sản phẩm từ Intent
         ProductDTO product = (ProductDTO) getIntent().getSerializableExtra("product");
         if (product != null) {
             productName.setText(product.getName());
             productDescription.setText(product.getDescription());
-            productPrice.setText(String.format("$%.2f", product.getPrice()));
+            productPrice.setText(formatCurrency(product.getPrice())); // Sử dụng formatCurrency
 
             // Lấy ID tài nguyên từ tên hình ảnh
             int resId = getResources().getIdentifier(product.getImage(), "drawable", getPackageName());
@@ -50,7 +56,7 @@ public class ProductDetailActivity extends AppCompatActivity {
                 productImage.setImageResource(resId);
             } else {
                 // Hình ảnh không tồn tại, thiết lập hình ảnh mặc định
-                productImage.setImageResource(R.drawable.ic_launcher_background); // Thay 'ic_launcher_background' bằng tên hình ảnh mặc định bạn muốn sử dụng
+                productImage.setImageResource(R.drawable.placeholder);
             }
         }
 
@@ -80,24 +86,24 @@ public class ProductDetailActivity extends AppCompatActivity {
             intent.putExtra("quantity", quantity);
             startActivity(intent);
         });
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProductDetailActivity.this, ProductActivity.class);
-                startActivity(intent);
-            }
+
+        back.setOnClickListener(view -> {
+            Intent intent = new Intent(ProductDetailActivity.this, ProductActivity.class);
+            startActivity(intent);
         });
+    }
+
+    // Phương thức định dạng giá thành
+    public static String formatCurrency(double amount) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return numberFormat.format(amount);
     }
 
     // Phương thức thêm sản phẩm vào giỏ hàng
     private void addToCart(ProductDTO product, int quantity) {
         if (product != null) {
-            Cart.addItem(product, quantity); // Thêm sản phẩm vào giỏ hàng
+            Cart.addItem(product, quantity);
             Log.d("Cart", "Added to cart: " + product.getName() + ", Quantity: " + quantity);
-            // Có thể hiển thị thông báo cho người dùng ở đây
-
         }
     }
-
-
 }

@@ -14,4 +14,9 @@
         <item>Nhận hàng tại cửa hàng</item>
     </string-array>
 
+    <string-array name="account_active">
+        <item>Kích hoạt</item>
+        <item>Hủy kích hoạt</item>
+    </string-array>
+
 </resources>

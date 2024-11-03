@@ -6,6 +6,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import model.Account;
+
 public class AccountDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "Vegetable.db";
     private static final int DATABASE_VERSION = 2; // Incremented the database version
@@ -18,7 +23,7 @@ public class AccountDBHelper extends SQLiteOpenHelper {
     private static final String COLUMN_EMAIL = "email";
     private static final String COLUMN_PASSWORD = "password";
     private static final String COLUMN_ROLE_ID = "role_id";
-
+    private static final String COLUMN_IS_ACTIVE ="is_active";
     private static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + " (" +
             COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             COLUMN_NAME + " TEXT NOT NULL, " +
@@ -39,20 +44,10 @@ public class AccountDBHelper extends SQLiteOpenHelper {
         db.setForeignKeyConstraintsEnabled(true);
     }
 
-
     @Override
     public void onCreate(SQLiteDatabase db) {
-
-//        db.execSQL("DELETE FROM " + TABLE_NAME); // Xóa tất cả dữ liệu trong bảng
-//        db.execSQL("INSERT OR IGNORE INTO Role (id, name) VALUES (1, 'Admin')");
-//        db.execSQL("INSERT OR IGNORE INTO Role (id, name) VALUES (2, 'Customer')");
-//        db.execSQL("INSERT OR IGNORE INTO " + TABLE_NAME + " (name, phone, address, email, password, role_id) " +
-//                "VALUES ('Admin User', '123456789', 'Admin Address', 'admin@example.com', 'adminpass', 1)");
-//        db.execSQL("INSERT OR IGNORE INTO " + TABLE_NAME + " (name, phone, address, email, password, role_id) " +
-//                "VALUES ('Customer User', '987654321', 'Customer Address', 'customer@example.com', 'customerpass', 2)");
-
+        db.execSQL(CREATE_TABLE); // Tạo bảng khi lần đầu tiên khởi tạo cơ sở dữ liệu
     }
-
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -69,7 +64,7 @@ public class AccountDBHelper extends SQLiteOpenHelper {
         values.put(COLUMN_ADDRESS, address);
         values.put(COLUMN_EMAIL, email);
         values.put(COLUMN_PASSWORD, password);
-        values.put(COLUMN_ROLE_ID, roleId);
+        values.put(COLUMN_ROLE_ID, roleId); // Thêm roleId
         long result = db.insert(TABLE_NAME, null, values);
         db.close();
         return result != -1;
@@ -78,16 +73,15 @@ public class AccountDBHelper extends SQLiteOpenHelper {
     public Cursor getAccountByEmailAndPassword(String email, String password) {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(
-                "SELECT * FROM " + TABLE_NAME + " WHERE email = ? AND password = ? AND is_active = 1",
+                "SELECT * FROM " + TABLE_NAME + " WHERE email = ? AND password = ?",
                 new String[]{email, password}
         );
         return cursor;
     }
 
-
     public boolean isAccountExist(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.query("Account", new String[]{"email"}, "email = ?", new String[]{email}, null, null, null);
+        Cursor cursor = db.query(TABLE_NAME, new String[]{"email"}, "email = ?", new String[]{email}, null, null, null);
         boolean exists = (cursor.getCount() > 0);
         cursor.close();
         return exists;
@@ -116,6 +110,7 @@ public class AccountDBHelper extends SQLiteOpenHelper {
         db.close();
         return rowsAffected > 0; // Trả về true nếu có ít nhất một hàng bị ảnh hưởng
     }
+
     public Cursor getAccountByEmail(String email) {
         SQLiteDatabase db = this.getReadableDatabase();
         return db.query(TABLE_NAME, null, COLUMN_EMAIL + " = ?", new String[]{email}, null, null, null);
@@ -131,5 +126,77 @@ public class AccountDBHelper extends SQLiteOpenHelper {
         db.close();
     }
 
+    public void activateAccount(String email) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put("is_active", 1); // Đặt is_active = 1
+
+        // Cập nhật is_active = 1 cho tài khoản có email tương ứng
+        db.update(TABLE_NAME, values, "email = ?", new String[]{email});
+        db.close();
+    }
+
+
+    public List<Account> getAllUsers() {
+        List<Account> accountList = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        // Chỉ định các cột mà bạn muốn truy vấn
+        String[] columns = {
+                COLUMN_ID,
+                COLUMN_NAME,
+                COLUMN_PHONE,
+                COLUMN_ADDRESS,
+                COLUMN_EMAIL,
+                COLUMN_PASSWORD,
+                COLUMN_ROLE_ID,
+                COLUMN_IS_ACTIVE
+        };
+
+        Cursor cursor = null;
+        try {
+            // Thực hiện truy vấn
+            cursor = db.query(TABLE_NAME, columns, null, null, null, null, null);
+
+            // Kiểm tra nếu cursor không null và di chuyển đến bản ghi đầu tiên
+            if (cursor != null && cursor.moveToFirst()) {
+                do {
+                    // Lấy chỉ số cột
+                    int idIndex = cursor.getColumnIndex(COLUMN_ID);
+                    int nameIndex = cursor.getColumnIndex(COLUMN_NAME);
+                    int phoneIndex = cursor.getColumnIndex(COLUMN_PHONE);
+                    int addressIndex = cursor.getColumnIndex(COLUMN_ADDRESS);
+                    int emailIndex = cursor.getColumnIndex(COLUMN_EMAIL);
+                    int passwordIndex = cursor.getColumnIndex(COLUMN_PASSWORD);
+                    int roleIdIndex = cursor.getColumnIndex(COLUMN_ROLE_ID);
+                    int isActiveIndex = cursor.getColumnIndex(COLUMN_IS_ACTIVE);
+
+                    // Tạo đối tượng Account và thêm vào danh sách
+                    Account account = new Account(
+                            cursor.getInt(idIndex),
+                            cursor.getString(nameIndex),
+                            cursor.getString(phoneIndex),
+                            cursor.getString(addressIndex),
+                            cursor.getString(emailIndex),
+                            cursor.getString(passwordIndex),
+                            cursor.getInt(roleIdIndex),
+                            cursor.getInt(isActiveIndex)
+                    );
+
+                    accountList.add(account);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            e.printStackTrace(); // In ra thông tin lỗi nếu có
+        } finally {
+            // Đảm bảo rằng cursor và database được đóng
+            if (cursor != null) {
+                cursor.close();
+            }
+            db.close();
+        }
+
+        return accountList; // Trả về danh sách người dùng
+    }
 
 }

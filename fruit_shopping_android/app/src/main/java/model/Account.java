@@ -1,20 +1,50 @@
 package model;
 
 public class Account {
-    private String id, name, phone, address, email, password;
+    private int id;
+    private String name;
+    private String phone;
+    private String address;
+    private String email;
+    private String password;
+    private int roleId; // Đảm bảo roleId là int
+    private int isActive; // Sửa đổi tên biến để tuân theo quy tắc camelCase
 
-    public Account(String address, String email, String id, String name, String password, String phone) {
-        this.address = address;
-        this.email = email;
+    // Constructor
+    public Account(int id, String name, String phone, String address, String email, String password, int roleId, int isActive) {
         this.id = id;
         this.name = name;
-        this.password = password;
         this.phone = phone;
-    }
-
-    public Account(String email, String password) {
+        this.address = address;
         this.email = email;
         this.password = password;
+        this.roleId = roleId; // Thêm roleId
+        this.isActive = isActive; // Thêm isActive
+    }
+
+    // Getter và Setter
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getAddress() {
@@ -33,22 +63,6 @@ public class Account {
         this.email = email;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getPassword() {
         return password;
     }
@@ -57,11 +71,19 @@ public class Account {
         this.password = password;
     }
 
-    public String getPhone() {
-        return phone;
+    public int getRoleId() {
+        return roleId;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setRoleId(int roleId) {
+        this.roleId = roleId;
+    }
+
+    public int getIsActive() {
+        return isActive; // Getter cho isActive
+    }
+
+    public void setIsActive(int isActive) {
+        this.isActive = isActive; // Setter cho isActive
     }
 }

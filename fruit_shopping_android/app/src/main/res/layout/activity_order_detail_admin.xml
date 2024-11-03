@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_light_background"
-
     android:orientation="vertical"
+    android:background="@color/cardview_light_background"
     android:padding="16dp">
 
     <TextView
@@ -12,11 +11,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Chi tiết đơn hàng"
+        android:text="Đây là chi tiết sản phẩm của đơn hàng: "
         android:textSize="20sp" />
 
     <ListView
-        android:id="@+id/orderDetailListView"
+        android:id="@+id/lvadmin"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1" />
@@ -25,7 +24,7 @@
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Trở về trang chủ"
-        android:layout_marginTop="8dp" />
+        android:layout_gravity="center"
+        android:text="Trở về" />
 
 </LinearLayout>

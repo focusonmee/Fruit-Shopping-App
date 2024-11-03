@@ -7,7 +7,9 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ProductDetailActivity">
+    android:background="@color/cardview_light_background"
+
+    tools:context=".UserActivity.ProductDetailActivity">
 
     <ImageView
         android:id="@+id/productImage"

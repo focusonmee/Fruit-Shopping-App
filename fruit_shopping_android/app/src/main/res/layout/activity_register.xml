@@ -4,7 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/cardview_light_background"
     android:padding="16dp">
+
+
+    <ImageView
+        android:id="@+id/carrotLogo"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="5dp"
+        android:src="@drawable/carrot_logo" />
 
     <TextView
         android:id="@+id/titleTextView"
@@ -12,9 +22,11 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="5dp"
         android:text="Đăng ký"
-        android:textSize="24sp" />
+
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <EditText
         android:id="@+id/nameEditText"
@@ -54,26 +66,44 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="Mật khẩu "
+        android:hint="Mật khẩu"
+        android:inputType="textPassword"
+        android:padding="12dp" />
+
+    <EditText
+        android:id="@+id/retype_passwordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:hint="Nhập lại mật khẩu"
         android:inputType="textPassword"
         android:padding="12dp" />
 
     <Button
         android:id="@+id/registerButton"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:padding="12dp"
+        android:layout_gravity="center"
+
+        android:backgroundTint="@color/green"
         android:text="Đăng ký tài khoản"
         android:textColor="@android:color/white" />
 
-    <Button
-        android:id="@+id/loginButton"
+    <TextView
+        android:id="@+id/loginTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        android:clickable="true"
+        android:focusable="true"
         android:padding="12dp"
-        android:text="Đăng nhập"
-        android:textColor="@android:color/white" />
+        android:minHeight="48dp"
+        android:textSize="14sp"
+        android:text="Đã có tài khoản? Đăng nhập"
+        android:textAlignment="center"
+        android:textStyle="bold" />
+
 
 </LinearLayout>

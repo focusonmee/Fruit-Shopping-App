@@ -69,7 +69,7 @@
 //
 //
 //
-package com.example.fruitshopping;
+package com.example.fruitshopping.UserActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -80,6 +80,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.fruitshopping.HomeActivity;
+import com.example.fruitshopping.R;
 
 import java.util.ArrayList;
 

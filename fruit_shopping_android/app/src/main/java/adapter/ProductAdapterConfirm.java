@@ -10,13 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.fruitshopping.ConfirmProductActivity;
+import com.example.fruitshopping.UserActivity.ConfirmProductActivity;
 import com.example.fruitshopping.R;
 
 import java.util.List;
 
 import model.CartItem;
 import dtos.ProductDTO;
+
+import java.text.NumberFormat;
+import java.util.Locale;
 
 public class ProductAdapterConfirm extends BaseAdapter {
 
@@ -63,19 +66,19 @@ public class ProductAdapterConfirm extends BaseAdapter {
 
         // Thiết lập thông tin sản phẩm vào các view
         title.setText(product.getName());
-        price.setText(String.format("Giá: %.2f VND", product.getPrice()));
+        price.setText(formatCurrency(product.getPrice())); // Đã sử dụng hàm formatCurrency
         category.setText(product.getCategoryName() != null ? product.getCategoryName() : "Không xác định");
 
         // Thiết lập số lượng
         int productQuantity = cartItem.getQuantity(); // Giả định bạn có phương thức getQuantity trong CartItem
-        quantity.setText("Số lượng: " + productQuantity);
+        quantity.setText("Số lượng: " + productQuantity + "Kg");
 
         // Thiết lập hình ảnh (nếu có)
         int resId = context.getResources().getIdentifier(product.getImage(), "drawable", context.getPackageName());
         if (resId != 0) {
             picture.setImageResource(resId);
         } else {
-            picture.setImageResource(R.drawable.ic_launcher_background);
+            picture.setImageResource(R.drawable.placeholder);
         }
 
         // Gán OnClickListener cho nút xóa
@@ -87,10 +90,15 @@ public class ProductAdapterConfirm extends BaseAdapter {
                 notifyDataSetChanged(); // Cập nhật adapter
                 ((ConfirmProductActivity) context).updateTotalPrice(); // Cập nhật tổng tiền
                 Toast.makeText(context, "Đã xóa sản phẩm khỏi giỏ hàng", Toast.LENGTH_SHORT).show(); // Thông báo cho người dùng
-
             }
         });
 
         return convertView;
+    }
+
+    // Định dạng tiền tệ
+    public static String formatCurrency(double amount) {
+        NumberFormat numberFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
+        return numberFormat.format(amount);
     }
 }

@@ -9,6 +9,9 @@ public class Product {
     private String banner;
     private String image;
 
+    public Product() {
+    }
+
     // Constructor
     public Product(int id, String name, String description, int categoryId, double price, String banner, String image) {
         this.id = id;

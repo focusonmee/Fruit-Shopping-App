@@ -8,19 +8,21 @@ public class ProductDTO implements Serializable {
     private String description;
     private double price; // Đảm bảo kiểu dữ liệu là double
     private String image;
+    private String banner;
     private int categoryId;
     private String categoryName; // Thêm thuộc tính categoryName
 
     // Constructor không tham số
     public ProductDTO() {}
 
-    // Constructor
-    public ProductDTO(int id, String name, String description, double price, String image, int categoryId, String categoryName) {
+    // Constructor với tất cả các tham số
+    public ProductDTO(int id, String name, String description, double price, String image, String banner, int categoryId, String categoryName) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.price = price;
         this.image = image;
+        this.banner = banner; // Khởi tạo banner
         this.categoryId = categoryId;
         this.categoryName = categoryName; // Khởi tạo categoryName
     }
@@ -64,6 +66,14 @@ public class ProductDTO implements Serializable {
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+    public String getBanner() {
+        return banner; // Getter cho banner
+    }
+
+    public void setBanner(String banner) {
+        this.banner = banner; // Setter cho banner
     }
 
     public int getCategoryId() {

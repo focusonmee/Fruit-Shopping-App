@@ -1,4 +1,4 @@
-package com.example.fruitshopping;
+package com.example.fruitshopping.UserActivity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +11,9 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.fruitshopping.HomeActivity;
+import com.example.fruitshopping.R;
 
 import helper.AccountDBHelper;
 import model.Cart;
@@ -143,9 +146,27 @@ public class ProfileActivity extends AppCompatActivity {
         String newAddress = addressEditText.getText().toString().trim();
         String newPassword = newPasswordEditText.getText().toString().trim();
 
-        // Validate dữ liệu
+        // Validate dữ liệu trống
         if (newName.isEmpty() || newPhone.isEmpty() || newAddress.isEmpty()) {
             Toast.makeText(this, "Vui lòng điền đầy đủ thông tin.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra tên (chỉ chứa ký tự chữ cái, độ dài tối thiểu)
+        if (!newName.matches("^[a-zA-Z\\s]+$") || newName.length() < 2) {
+            Toast.makeText(this, "Tên chỉ được chứa ký tự chữ và phải có ít nhất 2 ký tự.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra định dạng số điện thoại (chứa đúng 10 chữ số)
+        if (!newPhone.matches("^[0-9]{10}$")) {
+            Toast.makeText(this, "Số điện thoại phải chứa đúng 10 chữ số.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Kiểm tra địa chỉ (không quá dài và không chứa ký tự đặc biệt không hợp lệ)
+        if (newAddress.length() > 100) {
+            Toast.makeText(this, "Địa chỉ không được vượt quá 100 ký tự.", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -191,6 +212,7 @@ public class ProfileActivity extends AppCompatActivity {
             Toast.makeText(this, "Không có thay đổi nào để cập nhật!", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
 }

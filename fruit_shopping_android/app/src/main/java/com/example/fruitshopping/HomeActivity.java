@@ -8,6 +8,13 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.fruitshopping.UserActivity.ConfirmProductActivity;
+import com.example.fruitshopping.UserActivity.LoginActivity;
+import com.example.fruitshopping.UserActivity.OrderHistoryActivity;
+import com.example.fruitshopping.UserActivity.ProductActivity;
+import com.example.fruitshopping.UserActivity.ProfileActivity;
+
 import java.util.List;
 import model.Cart;
 import model.CartItem;
