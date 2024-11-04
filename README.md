@@ -12,3 +12,18 @@ Tài khoản admin: a@example.com
 password: password123
 
 Có thể dùng để tham khảo nếu cần. Đây là kỉ niệm của tui 4/11/2024
+
+This is a solo project used to mark assignment PRM392 FPT
+Small project but full of basic functions CRUD, Search, Cart Add to Cart, create order orderdetail account management login logout register, have an admin account assigned full management roles
+The interface is childish but not enough to offend the viewer
+Download SqliteBrowser to view Db
+
+Features that can be added: Pagination, Payment, login with google, forget password, send otp when paying, post personal pictures,... if you can!
+
+User account: trump@gmail.com  
+password: 123456
+
+Admin account: a@example.com
+password: password123
+
+Can be used for reference if needed. This is my memory of November 4, 2024
