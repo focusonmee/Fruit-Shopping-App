@@ -4,13 +4,18 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.fruitshopping.HomeActivity;
 import com.example.fruitshopping.R;
@@ -29,6 +34,21 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("FruitShopping"); // Thiết lập tiêu đề cho toolbar
+
+        // Thiết lập sự kiện click cho tiêu đề của Toolbar
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Chuyển về HomeActivity
+                Intent intent = new Intent(ProfileActivity.this, ProductActivity.class);
+                startActivity(intent);
+                finish(); // Kết thúc ProfileActivity
+            }
+        });// Hiển thị nút quay lại
         // Ánh xạ các view từ layout
         nameEditText = findViewById(R.id.nameEditText);
         phoneEditText = findViewById(R.id.phoneEditText);
@@ -38,7 +58,6 @@ public class ProfileActivity extends AppCompatActivity {
         newPasswordEditText = findViewById(R.id.newPasswordEditText);
         editButton = findViewById(R.id.editButton);
         saveButton = findViewById(R.id.saveButton);
-        backButton = findViewById(R.id.back);
         deleteButton = findViewById(R.id.deleteButton);
         // Khởi tạo Database Helper
         dbHelper = new AccountDBHelper(this);
@@ -65,14 +84,7 @@ public class ProfileActivity extends AppCompatActivity {
                 saveUserData(email);
             }
         });
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(ProfileActivity.this, HomeActivity.class);
-                startActivity(intent);
 
-            }
-        });
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -211,6 +223,78 @@ public class ProfileActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Không có thay đổi nào để cập nhật!", Toast.LENGTH_SHORT).show();
         }
+    }
+    // Tạo menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_main_drawer, menu); // Thay thế bằng tên file menu của bạn
+        return true;
+    }
+
+    // Xử lý sự kiện chọn menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // Kiểm tra các mục menu
+        if (id == R.id.menu_item1) {
+            if (!(this instanceof ProfileActivity)) {
+                // Chuyển đến ConfirmProductActivity nếu không phải là trang hiện tại
+                Intent intent = new Intent(this, ConfirmProductActivity.class);
+                startActivity(intent);
+            } else {
+                // Nếu đang ở ConfirmProductActivity, có thể chỉ cần thông báo hoặc không làm gì
+                Toast.makeText(this, "Bạn đang ở trang thông tin cá nhân!", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (id == R.id.menu_item2) {
+            Intent intent = new Intent(this, ConfirmProductActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_item3) {
+            showPopupMenu(findViewById(R.id.menu_item3)); // Gọi hàm hiển thị PopupMenu
+            return true;
+        } else if (id == android.R.id.home) { // Xử lý sự kiện nút quay lại
+            // Quay về Activity trước đó
+            finish(); // Thay vì khởi tạo lại Activity
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    // Phương thức hiển thị PopupMenu
+    private void showPopupMenu(View anchor) {
+        PopupMenu popupMenu = new PopupMenu(this, anchor); // Truyền view gốc cho PopupMenu
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu()); // Inflate menu
+
+        // Thiết lập sự kiện cho các mục trong PopupMenu
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.popup_item1) {
+                // Chuyển đến OrderHistoryActivity
+                Intent intent = new Intent(ProfileActivity.this, OrderHistoryActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (menuItem.getItemId() == R.id.popup_item2) {
+                // Xóa phiên đăng nhập và trở về màn hình đăng nhập
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear(); // Xóa dữ liệu đăng nhập
+                editor.apply(); // Áp dụng thay đổi
+
+                Cart.clearItems(); // Xóa giỏ hàng
+
+                Intent intent = new Intent(ProfileActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish(); // Kết thúc Activity hiện tại
+                return true;
+            }
+            return false;
+        });
+
+        // Hiển thị PopupMenu
+        popupMenu.show();
     }
 
 

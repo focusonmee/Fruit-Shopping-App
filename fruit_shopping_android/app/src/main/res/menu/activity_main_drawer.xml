@@ -1,0 +1,21 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_item1"
+        android:title="Profile"
+        android:icon="@drawable/profile"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_item2"
+        android:title="Cart"
+        android:icon="@drawable/cart"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_item3"
+        android:title="Cart"
+        android:icon="@drawable/hamburger"
+        app:showAsAction="ifRoom" />
+</menu>

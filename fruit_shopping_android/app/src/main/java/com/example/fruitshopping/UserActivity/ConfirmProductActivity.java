@@ -3,15 +3,20 @@ package com.example.fruitshopping.UserActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.fruitshopping.R;
 
@@ -47,6 +52,23 @@ public class ConfirmProductActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_confirm_product);
 
+        // Thiết lập Toolbar
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // Thiết lập tiêu đề cho Toolbar
+        getSupportActionBar().setTitle("FruitShopping"); // Thiết lập tiêu đề cho toolbar
+
+        // Thiết lập sự kiện click cho tiêu đề của Toolbar
+        toolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Chuyển về HomeActivity
+                Intent intent = new Intent(ConfirmProductActivity.this, ProductActivity.class);
+                startActivity(intent);
+                finish(); // Kết thúc ProfileActivity
+            }
+        });
         // Ánh xạ các view từ layout
         nameTextView = findViewById(R.id.name);
         phoneTextView = findViewById(R.id.phone);
@@ -90,7 +112,7 @@ public class ConfirmProductActivity extends AppCompatActivity {
 
         // Tính tổng tiền
         totalPrice = calculateTotalPrice(cartItems);
-        totalPriceTextView.setText(formatCurrency(totalPrice)); // Đã sử dụng hàm formatCurrency
+        totalPriceTextView.setText("Tổng tiền: "+formatCurrency(totalPrice)); // Đã sử dụng hàm formatCurrency
 
         confirmButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -178,5 +200,81 @@ public class ConfirmProductActivity extends AppCompatActivity {
         List<CartItem> cartItems = Cart.getItems();
         totalPrice = calculateTotalPrice(cartItems);
         totalPriceTextView.setText(formatCurrency(totalPrice)); // Đã sử dụng hàm formatCurrency
+    }
+    // Tạo menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_main_drawer, menu); // Thay thế bằng tên file menu của bạn
+        return true;
+    }
+
+    // Xử lý sự kiện chọn menu
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        // Kiểm tra các mục menu
+        if (id == R.id.menu_item1) {
+            // Chuyển đến ProfileActivity
+            Intent intent = new Intent(this, ProfileActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (id == R.id.menu_item2) {
+            // Nếu đang ở ConfirmProductActivity, không làm gì
+            if (!(this instanceof ConfirmProductActivity)) {
+                // Chuyển đến ConfirmProductActivity nếu không phải là trang hiện tại
+                Intent intent = new Intent(this, ConfirmProductActivity.class);
+                startActivity(intent);
+            } else {
+                // Nếu đang ở ConfirmProductActivity, có thể chỉ cần thông báo hoặc không làm gì
+                Toast.makeText(this, "Bạn đang ở giỏ hàng!", Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (id == R.id.menu_item3) {
+            showPopupMenu(findViewById(R.id.menu_item3)); // Gọi hàm hiển thị PopupMenu
+            return true;
+        } else if (id == android.R.id.home) { // Xử lý sự kiện nút quay lại
+            // Quay về Activity trước đó
+            finish(); // Thay vì khởi tạo lại Activity
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    // Phương thức hiển thị PopupMenu
+    private void showPopupMenu(View anchor) {
+        PopupMenu popupMenu = new PopupMenu(this, anchor); // Truyền view gốc cho PopupMenu
+        popupMenu.getMenuInflater().inflate(R.menu.popup_menu, popupMenu.getMenu()); // Inflate menu
+
+        // Thiết lập sự kiện cho các mục trong PopupMenu
+        popupMenu.setOnMenuItemClickListener(menuItem -> {
+            if (menuItem.getItemId() == R.id.popup_item1) {
+                // Chuyển đến OrderHistoryActivity
+                Intent intent = new Intent(ConfirmProductActivity.this, OrderHistoryActivity.class);
+                startActivity(intent);
+                return true;
+            } else if (menuItem.getItemId() == R.id.popup_item2) {
+                // Xóa phiên đăng nhập và trở về màn hình đăng nhập
+                SharedPreferences sharedPreferences = getSharedPreferences("MyPreferences", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPreferences.edit();
+                editor.clear(); // Xóa dữ liệu đăng nhập
+                editor.apply(); // Áp dụng thay đổi
+
+                Cart.clearItems(); // Xóa giỏ hàng
+
+                Intent intent = new Intent(ConfirmProductActivity.this, LoginActivity.class);
+                startActivity(intent);
+                finish(); // Kết thúc Activity hiện tại
+                return true;
+            }
+            return false;
+        });
+
+        // Hiển thị PopupMenu
+        popupMenu.show();
     }
 }

@@ -7,6 +7,7 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+
     <!-- TextView để hiển thị lời chào -->
     <TextView
         android:id="@+id/welcomeTextView"

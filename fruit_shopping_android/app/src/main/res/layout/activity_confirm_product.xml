@@ -5,13 +5,21 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp"
     android:background="@color/cardview_light_background"
-
+    android:orientation="vertical"
     tools:context=".UserActivity.ConfirmProductActivity">
 
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:backgroundTint="@color/green"
+        android:fitsSystemWindows="true"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <TextView
+
         android:id="@+id/buyerInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,6 +34,7 @@
         android:id="@+id/name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:gravity="start"
         android:paddingTop="8dp"
@@ -36,6 +45,7 @@
         android:id="@+id/phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:gravity="start"
         android:paddingTop="4dp"
@@ -46,16 +56,20 @@
         android:id="@+id/address"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:gravity="start"
         android:paddingTop="8dp"
+
         android:text="Địa chỉ:"
         android:textSize="16sp" />
 
     <Spinner
         android:id="@+id/spinnerPaymentMethod"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:background="@android:drawable/btn_dropdown"
         android:entries="@array/payment_methods"
@@ -64,8 +78,10 @@
 
     <Spinner
         android:id="@+id/spinnerShippingMethod"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:background="@android:drawable/btn_dropdown"
         android:entries="@array/shipping_methods"
@@ -73,8 +89,10 @@
 
     <EditText
         android:id="@+id/note"
+
         android:layout_width="match_parent"
         android:layout_height="56dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginBottom="8dp"
         android:gravity="start"
         android:hint="Ghi chú"
@@ -98,8 +116,10 @@
 
         <TextView
             android:id="@+id/totalPrice"
+
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:gravity="center"
             android:text="Tổng giá: $0.00"
@@ -113,6 +133,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:backgroundTint="@color/green"
+
         android:layout_marginBottom="8dp"
         android:text="Xác nhận mua hàng" />
 
@@ -120,6 +142,8 @@
         android:id="@+id/back"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/green"
+
         android:layout_gravity="center"
         android:text="Mua thêm sản phẩm" />
 

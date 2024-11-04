@@ -2,11 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@color/cardview_light_background"
 
-    android:padding="16dp">
-
+>
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        android:backgroundTint="@color/green"
+        android:fitsSystemWindows="true"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
     <TextView
         android:id="@+id/userNameTextView"
         android:layout_width="match_parent"
@@ -14,18 +22,14 @@
         android:layout_marginRight="20dp"
         android:padding="15dp"
         android:text="Đây là những order của: "
+
         android:textSize="20sp" />
 
     <ListView
         android:id="@+id/orderListView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginLeft="16dp"
         android:layout_weight="1" />  <!-- Thay đổi ở đây -->
 
-    <Button
-        android:id="@+id/back"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="Trở về trang chủ" />
 </LinearLayout>

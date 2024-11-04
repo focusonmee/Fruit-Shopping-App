@@ -32,6 +32,7 @@
         android:id="@+id/saveCategoryButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/green"
         android:text="Lưu"
         android:layout_marginTop="8dp"/>
 
@@ -40,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Quay về"
+        android:backgroundTint="@color/green"
         android:layout_marginTop="8dp"/>
 
 </LinearLayout>

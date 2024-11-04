@@ -181,7 +181,7 @@ private String checkLogin(String email, String password) {
         if ("1".equals(role)) { // Nếu role = 1, điều hướng đến AdminActivity
             intent = new Intent(LoginActivity.this, AdminActivity.class);
         } else { // Nếu role khác, điều hướng đến HomeActivity
-            intent = new Intent(LoginActivity.this, HomeActivity.class);
+            intent = new Intent(LoginActivity.this, ProductActivity.class);
         }
         startActivity(intent);
         return fetchedEmail;
